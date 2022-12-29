@@ -53,3 +53,12 @@ main {
     background-color: rgb(88, 88, 88);
     cursor: pointer;
 }
+
+.field.flag {
+    background-color: rgb(152, 152, 152);
+    cursor: default !important;
+}
+
+.field:not(.available) {
+    background-color: rgb(186, 186, 186); 
+}

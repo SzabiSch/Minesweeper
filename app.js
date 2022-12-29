@@ -14,15 +14,18 @@ const code_flag = '&#127988';
 //Variables
 let height = 10;
 let width = 10;
-let mine_mum = 10;
+let mine_num = 10;
 let flags = 0;
+let mineMap = [];
+let game_over = true;
+createMap(0, 0);
 
 createView();
 display_start.addEventListener('click', createView);
 
 function createView() {
     board.innerHTML = '';
-    display_mines.innerHTML = mine_mum;
+    display_mines.innerHTML = mine_num;
     display_start.innerHTML = code_smile;
     flags = 0;
     display_flags.innerHTML = flags;
@@ -37,8 +40,30 @@ function createView() {
 
             col_div.append(field);
         }
-        board.append(col_div);
+        board.append(col_div); 
+}
 }
 
+function createMap(click_x, click_y){
+   //Build MapArray
+   for (let x = 0; x < width; x++){
+    mineMap[x] = [];
+     for (let y = 0; y <height; y++) {
+        mineMap[x][y]= 0;
+     }
+   }
 
-};
+   for (let mine = 0; mine < mine_num; mine++){
+        mine_y = click_y;
+        mine_x = click_x;
+        while (mineMap[mine_x][mine_y] == 'M' || (mine_x == click_x && mine_y == click_y)){
+            mine_x = Math.floor(Math.random() * width);
+            mine_y = Math.floor(Math.random() * height);
+        }
+        mineMap[mine_x][mine_y] = 'M';
+
+
+   }
+ console.log(mineMap);
+
+}
