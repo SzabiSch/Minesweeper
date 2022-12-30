@@ -18,7 +18,7 @@ let mine_num = 10;
 let flags = 0;
 let mineMap = [];
 let game_over = true;
-createMap(0, 0);
+
 
 createView();
 display_start.addEventListener('click', createView);
@@ -36,8 +36,8 @@ function createView() {
             let field = document.createElement('div');
             field.setAttribute('class' ,'field available ');
             field.setAttribute('id', x+'_'+y);
-            
-
+            field.addEventListener('click', clickField);
+            //field.addEventListener('contextmenu', flagField);
             col_div.append(field);
         }
         board.append(col_div); 
@@ -52,7 +52,7 @@ function createMap(click_x, click_y){
         mineMap[x][y]= 0;
      }
    }
-
+//Da werden die Minen und ihre Pleatze generiert
    for (let mine = 0; mine < mine_num; mine++){
         mine_y = click_y;
         mine_x = click_x;
@@ -61,9 +61,51 @@ function createMap(click_x, click_y){
             mine_y = Math.floor(Math.random() * height);
         }
         mineMap[mine_x][mine_y] = 'M';
+        //set the numbers around the Mines
+        for (let x = mine_x - 1; x <= mine_x + 1; x++){
+            for (let y = mine_y - 1; y <= mine_y + 1; y++){
+                if (x >= 0 && y >= 0 && x < width && y < height) {
+                    if (mineMap[x][y] != 'M') {
+                        mineMap[x][y]++;
+                    }
+                }
+            }   
+        }
 
 
    }
- console.log(mineMap);
 
+ game_over = false;
+ showField(click_x, click_y);
+
+}
+
+function clickField(e) {
+let id = e.target.id
+let x = Number(id.split('_')[0]);
+let y = Number(id.split('_')[1]);
+
+if (game_over) {
+    createMap(x,y);
+    } 
+    else {
+        showField(x,y);
+    }
+}
+
+function showField(cord_x, cord_y) {
+    field = document.getElementById(cord_x+'_'+cord_y);
+    if(field.classList.contains('available')) { 
+        field.classList.remove('available');
+        if (mineMap[cord_x][cord_y] == 'M') {
+            //LOSE
+        }
+        else if (mineMap[cord_x][cord_y] == 0){
+            //Rekursion
+        }
+        else {
+            field.innerHTML = mineMap[cord_x][cord_y];
+            //WIN
+        }
+    }
 }
